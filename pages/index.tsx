@@ -11,9 +11,10 @@ import { Liff } from "@line/liff/dist/lib";
 const SendMessageButton = () => {
   /* 追加: メッセージ送信 */
   const sendMessage = async () => {
-    const { liff } = await import("@line/liff");
+    const liff = (await import("@line/liff")).default;
+    console.log("liffId", process.env.NEXT_PUBLIC_LIFF_ID);
     liff
-      .init({ liffId: process.env.LIFF_APP_ID as string }) // LIFF IDをセットする
+      .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string }) // LIFF IDをセットする
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({}); // ログインしていなければ最初にログインする
@@ -28,10 +29,10 @@ const SendMessageButton = () => {
               },
             ])
             .then(function () {
-              alert("Message sent");
+              console.log("send message done");
             })
             .catch(function (error) {
-              alert("Error sending message: " + error);
+              console.log("Error sending message: " + error);
             });
         }
       });
@@ -46,25 +47,27 @@ const SendMessageButton = () => {
 const ShowProfileButton = () => {
   /* 追加: UserProfileをAlertで表示 */
   const getUserInfo = async () => {
-    const { liff } = await import("@line/liff");
-    liff.init({ liffId: process.env.LIFF_APP_ID as string }).then(() => {
-      if (!liff.isLoggedIn()) {
-        liff.login({}); // ログインしていなければ最初にログインする
-      } else if (liff.isInClient()) {
-        liff
-          .getProfile() // ユーザ情報を取得する
-          .then((profile) => {
-            const userId: string = profile.userId;
-            const displayName: string = profile.displayName;
-            alert(
-              `Name: ${displayName}, userId: ${userId}, statusMessage: ${profile.statusMessage}, pictureURL: ${profile.pictureUrl}`
-            );
-          })
-          .catch(function (error) {
-            alert("Error sending message: " + error);
-          });
-      }
-    });
+    const liff = (await import("@line/liff")).default;
+    liff
+      .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login({}); // ログインしていなければ最初にログインする
+        } else if (liff.isInClient()) {
+          liff
+            .getProfile() // ユーザ情報を取得する
+            .then((profile) => {
+              const userId: string = profile.userId;
+              const displayName: string = profile.displayName;
+              console.log(
+                `Name: ${displayName}, userId: ${userId}, statusMessage: ${profile.statusMessage}, pictureURL: ${profile.pictureUrl}`
+              );
+            })
+            .catch(function (error) {
+              console.log("Error sending message: " + error);
+            });
+        }
+      });
   };
   return (
     <button className="button" onClick={getUserInfo}>
@@ -141,6 +144,35 @@ const Camera = () => {
 
 // const IndexPage = (props: Props) => {
 const IndexPage = () => {
+  useEffect(() => {
+    console.log("here!");
+    const func = async () => {
+      console.log("here222!");
+      const liff = (await import("@line/liff")).default;
+      liff
+        .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string })
+        .then(() => {
+          if (!liff.isLoggedIn()) {
+            console.log("let login");
+            liff.login({}); // ログインしていなければ最初にログインする
+          } else if (liff.isInClient()) {
+            liff
+              .getProfile() // ユーザ情報を取得する
+              .then((profile) => {
+                const userId: string = profile.userId;
+                const displayName: string = profile.displayName;
+                console.log(
+                  `Name: ${displayName}, userId: ${userId}, statusMessage: ${profile.statusMessage}, pictureURL: ${profile.pictureUrl}`
+                );
+              })
+              .catch(function (error) {
+                console.log("Error sending message: " + error);
+              });
+          }
+        });
+    };
+    func();
+  }, []);
   return (
     <>
       <Head>
