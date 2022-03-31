@@ -149,13 +149,15 @@ const IndexPage = () => {
     const func = async () => {
       console.log("here222!");
       const liff = (await import("@line/liff")).default;
+      console.log(liff.isInClient);
       liff
         .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string })
         .then(() => {
           if (!liff.isLoggedIn()) {
             console.log("let login");
             liff.login({}); // ログインしていなければ最初にログインする
-          } else if (liff.isInClient()) {
+            // } else if (liff.isInClient()) {
+          } else {
             liff
               .getProfile() // ユーザ情報を取得する
               .then((profile) => {
