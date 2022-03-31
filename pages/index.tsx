@@ -69,7 +69,7 @@ export const Camera = () => {
   );
 };
 
-export const IndexPage = (props: Props) => {
+const IndexPage = (props: Props) => {
   return (
     <>
       <Head>
@@ -87,3 +87,5 @@ export const getStaticProps = async (context: GetStaticPropsContext) => {
     },
   };
 };
+
+export default IndexPage;
