@@ -26,10 +26,10 @@ const SendMessageButton = () => {
               },
             ])
             .then(function () {
-              window.alert("Message sent");
+              alert("Message sent");
             })
             .catch(function (error) {
-              window.alert("Error sending message: " + error);
+              alert("Error sending message: " + error);
             });
         }
       });
@@ -53,10 +53,12 @@ const ShowProfileButton = () => {
           .then((profile) => {
             const userId: string = profile.userId;
             const displayName: string = profile.displayName;
-            alert(`Name: ${displayName}, userId: ${userId}`);
+            alert(
+              `Name: ${displayName}, userId: ${userId}, statusMessage: ${profile.statusMessage}, pictureURL: ${profile.pictureUrl}`
+            );
           })
           .catch(function (error) {
-            window.alert("Error sending message: " + error);
+            alert("Error sending message: " + error);
           });
       }
     });
