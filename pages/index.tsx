@@ -16,9 +16,7 @@ const SendMessageButton = () => {
     liff
       .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string }) // LIFF IDをセットする
       .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}); // ログインしていなければ最初にログインする
-        } else if (liff.isInClient()) {
+        if (liff.isLoggedIn()) {
           // LIFFで動いているのであれば
           liff
             .sendMessages([
@@ -51,9 +49,7 @@ const ShowProfileButton = () => {
     liff
       .init({ liffId: process.env.NEXT_PUBLIC_LIFF_ID as string })
       .then(() => {
-        if (!liff.isLoggedIn()) {
-          liff.login({}); // ログインしていなければ最初にログインする
-        } else if (liff.isInClient()) {
+        if (liff.isLoggedIn()) {
           liff
             .getProfile() // ユーザ情報を取得する
             .then((profile) => {
