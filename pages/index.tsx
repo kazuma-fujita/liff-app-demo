@@ -2,7 +2,7 @@ import type { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { useCallback, useRef, useState } from "react";
 import Webcam from "react-webcam";
-import "./styles.css";
+import Image from "next/image";
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -61,7 +61,7 @@ export const Camera = () => {
             </button>
           </div>
           <div>
-            <img src={url} alt="Screenshot" />
+            <Image src={url} alt="Screenshot" />
           </div>
         </>
       )}
