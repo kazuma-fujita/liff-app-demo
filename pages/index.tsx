@@ -1,22 +1,24 @@
 import type { GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import Head from "next/head";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Image from "next/image";
-import liff from "@line/liff";
+import { Liff } from "@line/liff/dist/lib";
+// import liff from "@line/liff";
 
-type Props = InferGetStaticPropsType<typeof getStaticProps>;
+// type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const SendMessageButton = () => {
   /* 追加: メッセージ送信 */
-  const sendMessage = () => {
+  const sendMessage = async () => {
+    const { liff } = await import("@line/liff");
     liff
-      .init({ liffId: process.env.REACT_APP_LIFF_ID as string }) // LIFF IDをセットする
+      .init({ liffId: process.env.LIFF_APP_ID as string }) // LIFF IDをセットする
       .then(() => {
         if (!liff.isLoggedIn()) {
           liff.login({}); // ログインしていなければ最初にログインする
         } else if (liff.isInClient()) {
-          // LIFFので動いているのであれば
+          // LIFFで動いているのであれば
           liff
             .sendMessages([
               {
@@ -43,8 +45,9 @@ const SendMessageButton = () => {
 
 const ShowProfileButton = () => {
   /* 追加: UserProfileをAlertで表示 */
-  const getUserInfo = () => {
-    liff.init({ liffId: process.env.REACT_APP_LIFF_ID as string }).then(() => {
+  const getUserInfo = async () => {
+    const { liff } = await import("@line/liff");
+    liff.init({ liffId: process.env.LIFF_APP_ID as string }).then(() => {
       if (!liff.isLoggedIn()) {
         liff.login({}); // ログインしていなければ最初にログインする
       } else if (liff.isInClient()) {
@@ -136,23 +139,25 @@ const Camera = () => {
   );
 };
 
-const IndexPage = (props: Props) => {
+// const IndexPage = (props: Props) => {
+const IndexPage = () => {
   return (
     <>
       <Head>
-        <title>{props.pageTitle}</title>
+        {/* <title>{props.pageTitle}</title> */}
+        <title>LIFF App demo</title>
       </Head>
       <Camera />
     </>
   );
 };
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
-  return {
-    props: {
-      pageTitle: "LIFF App demo",
-    },
-  };
-};
+// export const getStaticProps = async (context: GetStaticPropsContext) => {
+//   return {
+//     props: {
+//       pageTitle: "LIFF App demo",
+//     },
+//   };
+// };
 
 export default IndexPage;
